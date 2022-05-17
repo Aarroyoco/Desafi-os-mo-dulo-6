@@ -25,6 +25,7 @@ def build_web_page(body)
     \t <h1>descubre las fotos tomadas por la NASA en MARTE<h1>\n
     \t <ul>\n"
     
+    
     photos.map {|x| html += "\t\t\t <li><img src=#{x["img_src"]} width='200px'></li>\n"}    
     
     html +=
