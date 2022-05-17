@@ -1,8 +1,8 @@
 require 'net/http'
 require 'json'
 
-def request(address, api_key)
-    url = URI(address+api_key)
+def request(url, api_key)
+    url = URI(url+api_key)
     
     https = Net::HTTP.new(url.host, url.port)
     https.use_ssl = true
@@ -18,17 +18,17 @@ def build_web_page(body)
     
     html =
     "<html>\n
-    <title>Fotos de la NASA</title>\n
-    <head>\n
-    </head>\n
-    <body>\n
-    <h1>Bienvenid@, conoce fotos tomadas por la NASA en el espacio<h1>\n
-    <ul>\n"
+    \t<title>Fotos de la NASA</title>\n
+    \t<head>\n
+    \t</head>\n
+    \t<body>\n
+    \t <h1>descubre las fotos tomadas por la NASA en MARTE<h1>\n
+    \t <ul>\n"
     
-    photos.map {|x| html += "\t<li><img src=#{x["img_src"]} width='200px'></li>\n"}    
+    photos.map {|x| html += "\t\t\t <li><img src=#{x["img_src"]} width='200px'></li>\n"}    
     
     html +=
-    "</ul>\n
+    "\t\t</ul>\n
     </body>\n
     </html>"
     
@@ -51,6 +51,8 @@ def photos_count(body)
     final_hash
 end
 
-body = request("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000", "&api_key=0IKxbe4GcwTwCfJsbKzegTyslzF6NhVE1gHkgRgy&page=1")
-build_web_page(body)
+api_key = ARGV[0]
+homepage = request("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000", "&api_key=#{api_key}&page=1")
+build_web_page(homepage)
+body = request("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000", "&api_key=#{api_key}")
 print photos_count(body)
